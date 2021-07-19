@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "WebsocketChat.app"
-               BlueprintName = "WebsocketChat"
-               ReferencedContainer = "container:WebsocketChat.xcodeproj">
+               BuildableName = "WebSocketChat.app"
+               BlueprintName = "WebSocketChat"
+               ReferencedContainer = "container:WebSocketChat.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "WebsocketChatTests.xctest"
-               BlueprintName = "WebsocketChatTests"
-               ReferencedContainer = "container:WebsocketChat.xcodeproj">
+               BuildableName = "WebSocketChatTests.xctest"
+               BlueprintName = "WebSocketChatTests"
+               ReferencedContainer = "container:WebSocketChat.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "WebsocketChat.app"
-            BlueprintName = "WebsocketChat"
-            ReferencedContainer = "container:WebsocketChat.xcodeproj">
+            BuildableName = "WebSocketChat.app"
+            BlueprintName = "WebSocketChat"
+            ReferencedContainer = "container:WebSocketChat.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "WebsocketChat.app"
-            BlueprintName = "WebsocketChat"
-            ReferencedContainer = "container:WebsocketChat.xcodeproj">
+            BuildableName = "WebSocketChat.app"
+            BlueprintName = "WebSocketChat"
+            ReferencedContainer = "container:WebSocketChat.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
