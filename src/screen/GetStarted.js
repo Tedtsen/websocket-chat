@@ -1,15 +1,23 @@
 import React from 'react';
 import {View, Text, Button, StyleSheet} from 'react-native';
-import {useContext} from 'react';
-import {AppContext} from '../provider/ContextProvider';
 
-const Home = ({navigation}) => {
-  const context = useContext(AppContext);
-
+const GetStarted = ({navigation}) => {
   return (
     <View style={styles.container}>
-      <Text>This is your home!</Text>
-      <Text>You are {context.isLoggedIn}!</Text>
+      <Text style={styles.title}>Websocket Chat</Text>
+      <Text style={styles.paragraph}>
+        React Native implementation of a WebSocket Chat App.
+        {'\n'}
+        Please don't send sensitive information.
+      </Text>
+      <Button
+        title="Get Started"
+        onPress={() =>
+          navigation.reset({
+            index: 0,
+            routes: [{name: 'Home'}],
+          })
+        }></Button>
     </View>
   );
 };
@@ -34,4 +42,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Home;
+export default GetStarted;
