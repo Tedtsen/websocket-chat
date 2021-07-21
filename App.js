@@ -13,6 +13,9 @@ import Home from './src/screen/Home';
 import Chat from './src/screen/Chat';
 import Settings from './src/screen/Settings';
 
+// Shared components
+import {DrawerContent} from './src/shared/DrawerContent';
+
 const HomeStack = createStackNavigator();
 const ChatStack = createStackNavigator();
 const SettingsStack = createStackNavigator();
@@ -71,7 +74,10 @@ const App = () => {
     <SafeAreaProvider>
       <ContextProvider>
         <NavigationContainer>
-          <Drawer.Navigator initialRouteName="Home" backBehavior="initialRoute">
+          <Drawer.Navigator
+            initialRouteName="Home"
+            backBehavior="initialRoute"
+            drawerContent={props => <DrawerContent {...props} />}>
             <Drawer.Screen
               name="Home"
               component={HomeStackScreen}></Drawer.Screen>
