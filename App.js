@@ -8,7 +8,7 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {ContextProvider} from './src/provider/ContextProvider';
 
 // Components
-import GetStarted from './src/screen/GetStarted';
+import SplashScreen from './src/screen/SplashScreen';
 import Home from './src/screen/Home';
 import Chat from './src/screen/Chat';
 import Settings from './src/screen/Settings';
@@ -25,8 +25,8 @@ const HomeStackScreen = ({navigation}) => {
   return (
     <HomeStack.Navigator screenOptions={stackScreenOptions}>
       <HomeStack.Screen
-        name="GetStarted"
-        component={GetStarted}
+        name="SplashScreen"
+        component={SplashScreen}
         options={{
           headerShown: false,
         }}></HomeStack.Screen>
