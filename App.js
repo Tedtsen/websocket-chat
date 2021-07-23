@@ -9,6 +9,7 @@ import {ContextProvider} from './src/provider/ContextProvider';
 
 // Components
 import SplashScreen from './src/screen/SplashScreen';
+import SignIn from './src/screen/SignIn';
 import Home from './src/screen/Home';
 import Chat from './src/screen/Chat';
 import Settings from './src/screen/Settings';
@@ -27,6 +28,12 @@ const HomeStackScreen = ({navigation}) => {
       <HomeStack.Screen
         name="SplashScreen"
         component={SplashScreen}
+        options={{
+          headerShown: false,
+        }}></HomeStack.Screen>
+      <HomeStack.Screen
+        name="SignIn"
+        component={SignIn}
         options={{
           headerShown: false,
         }}></HomeStack.Screen>
