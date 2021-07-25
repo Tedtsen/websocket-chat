@@ -9,7 +9,7 @@ const Home = ({navigation}) => {
   return (
     <View style={styles.container}>
       <Text>This is your home!</Text>
-      <Text>You are {context.isLoggedIn}!</Text>
+      <Text>You are {}!</Text>
     </View>
   );
 };

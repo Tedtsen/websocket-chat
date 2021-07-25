@@ -1,4 +1,5 @@
 import React from 'react';
+import {useContext} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {
   Avatar,
@@ -13,8 +14,11 @@ import {
 import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {AppContext} from '../provider/ContextProvider';
 
 export function DrawerContent(props) {
+  const context = useContext(AppContext);
+
   return (
     <View style={{flex: 1}}>
       <DrawerContentScrollView {...props}>
@@ -75,7 +79,7 @@ export function DrawerContent(props) {
           icon={({color, size}) => (
             <Icon name="exit-to-app" color={color} size={size}></Icon>
           )}
-          onPress={() => {}}
+          onPress={() => context.authContext.signOut()}
         />
       </Drawer.Section>
     </View>

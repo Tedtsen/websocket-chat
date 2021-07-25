@@ -1,86 +1,61 @@
 import 'react-native-gesture-handler'; // Always keep at top, do not move this line
 import React from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {NavigationContainer} from '@react-navigation/native';
+import EncryptedStorage from 'react-native-encrypted-storage';
+import {NavigationContainer, StackActions} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
-import {ContextProvider} from './src/provider/ContextProvider';
+import {AppContext, ContextProvider} from './src/provider/ContextProvider';
+import {useState, useEffect, useContext} from 'react';
+import {View, ActivityIndicator} from 'react-native';
 
 // Components
-import SplashScreen from './src/screen/SplashScreen';
-import SignIn from './src/screen/SignIn';
-import Home from './src/screen/Home';
-import Chat from './src/screen/Chat';
-import Settings from './src/screen/Settings';
+import RootStackScreen from './src/navigation/RootStack';
+import HomeStackScreen from './src/navigation/HomeStack';
+import SettingsStackScreen from './src/navigation/SettingsStack';
+import ChatStackScreen from './src/navigation/ChatStack';
 
 // Shared components
 import {DrawerContent} from './src/shared/DrawerContent';
 
-const HomeStack = createStackNavigator();
-const ChatStack = createStackNavigator();
-const SettingsStack = createStackNavigator();
 const Drawer = createDrawerNavigator();
-
-const HomeStackScreen = ({navigation}) => {
-  return (
-    <HomeStack.Navigator screenOptions={stackScreenOptions}>
-      <HomeStack.Screen
-        name="SplashScreen"
-        component={SplashScreen}
-        options={{
-          headerShown: false,
-        }}></HomeStack.Screen>
-      <HomeStack.Screen
-        name="SignIn"
-        component={SignIn}
-        options={{
-          headerShown: false,
-        }}></HomeStack.Screen>
-      <HomeStack.Screen
-        name="Home"
-        component={Home}
-        options={{
-          title: 'Home',
-          headerLeft: stackHeaderLeft(navigation),
-        }}></HomeStack.Screen>
-    </HomeStack.Navigator>
-  );
-};
-
-const SettingsStackScreen = ({navigation}) => {
-  return (
-    <SettingsStack.Navigator screenOptions={stackScreenOptions}>
-      <SettingsStack.Screen
-        name="Settings"
-        component={Settings}
-        options={{
-          title: 'Settings',
-          headerLeft: stackHeaderLeft(navigation),
-        }}></SettingsStack.Screen>
-    </SettingsStack.Navigator>
-  );
-};
-
-const ChatStackScreen = ({navigation}) => {
-  return (
-    <ChatStack.Navigator screenOptions={stackScreenOptions}>
-      <ChatStack.Screen
-        name="Chat"
-        component={Chat}
-        options={{
-          title: 'Chat',
-          headerLeft: stackHeaderLeft(navigation),
-        }}></ChatStack.Screen>
-    </ChatStack.Navigator>
-  );
-};
-
 const App = () => {
+  const context = useContext(AppContext);
+
+  useEffect(() => {
+    setTimeout(async () => {
+      let userToken = null;
+      try {
+        const storedUserToken = await EncryptedStorage.getItem('userToken');
+        if (storedUserToken !== undefined) {
+          userToken = storedUserToken;
+        }
+      } catch (err) {
+        console.log(err);
+      }
+      context.dispatch({type: 'REGISTER', token: userToken});
+    }, 2000);
+  }, []);
+
+  if (context.loginState.isLoading) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <ActivityIndicator size="large" color="black"></ActivityIndicator>
+      </View>
+    );
+  }
   return (
     <SafeAreaProvider>
-      <ContextProvider>
-        <NavigationContainer>
+      <NavigationContainer>
+        {context.loginState.userToken === null ? (
+          <RootStackScreen></RootStackScreen>
+        ) : (
           <Drawer.Navigator
             initialRouteName="Home"
             backBehavior="initialRoute"
@@ -95,32 +70,14 @@ const App = () => {
               name="Settings"
               component={SettingsStackScreen}></Drawer.Screen>
           </Drawer.Navigator>
-        </NavigationContainer>
-      </ContextProvider>
+        )}
+      </NavigationContainer>
     </SafeAreaProvider>
   );
 };
 
-const stackScreenOptions = {
-  headerStyle: {
-    backgroundColor: '#93CAED',
-  },
-  headerTintColor: 'white',
-  headerTitleStyle: {
-    fontWeight: 'bold',
-  },
-};
-
-const stackHeaderLeft = navigation => {
-  return () => (
-    <Icon.Button
-      name="ios-menu"
-      size={25}
-      backgroundColor="#93CAED"
-      onPress={() => {
-        navigation.openDrawer();
-      }}></Icon.Button>
-  );
-};
-
-export default App;
+export default () => (
+  <ContextProvider>
+    <App />
+  </ContextProvider>
+);
