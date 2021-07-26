@@ -9,7 +9,7 @@ const ContextProvider = props => {
 
   const initialLoginState = {
     isLoading: true,
-    userName: null,
+    username: null,
     userToken: null,
   };
 
@@ -24,21 +24,21 @@ const ContextProvider = props => {
       case 'LOGIN':
         return {
           ...previousState,
-          userName: action.id,
+          username: action.id,
           userToken: action.token,
           isLoading: false,
         };
       case 'LOGOUT':
         return {
           ...previousState,
-          userName: null,
+          username: null,
           userToken: null,
           isLoading: false,
         };
       case 'REGISTER':
         return {
           ...previousState,
-          userName: action.id,
+          username: action.id,
           userToken: action.token,
           isLoading: false,
         };
@@ -52,9 +52,9 @@ const ContextProvider = props => {
 
   const authContext = React.useMemo(
     () => ({
-      signIn: async (userName, password) => {
+      signIn: async (username, password) => {
         let userToken = null;
-        if (userName === 'test' && password === 'test') {
+        if (username === 'test' && password === 'test') {
           userToken = 'sometoken';
           try {
             await EncryptedStorage.setItem('userToken', userToken);
@@ -62,7 +62,7 @@ const ContextProvider = props => {
             console.log(err);
           }
         }
-        dispatch({type: 'LOGIN', id: userName, token: userToken});
+        dispatch({type: 'LOGIN', id: username, token: userToken});
       },
       signOut: async () => {
         try {

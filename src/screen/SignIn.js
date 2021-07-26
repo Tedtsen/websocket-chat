@@ -21,35 +21,48 @@ import {AppContext} from '../provider/ContextProvider';
 
 const SignIn = ({navigation}) => {
   const [data, setData] = useState({
-    userName: '',
+    username: '',
     password: '',
-    check_textInputChange: false,
+    usernamePassedIcon: false,
     secureTextEntry: true,
+    isValidUsername: true,
+    isValidPassword: true,
   });
 
   const context = useContext(AppContext);
 
-  const textInputChange = val => {
-    if (val.length !== 0) {
+  const handleUsernameChange = val => {
+    if (val.trim().length >= 5) {
       setData({
         ...data,
-        userName: val,
-        check_textInputChange: true,
+        username: val,
+        usernamePassedIcon: true,
+        isValidUsername: true,
       });
     } else {
       setData({
         ...data,
-        userName: val,
-        check_textInputChange: false,
+        username: val,
+        usernamePassedIcon: false,
+        isValidUsername: false,
       });
     }
   };
 
   const handlePasswordChange = val => {
-    setData({
-      ...data,
-      password: val,
-    });
+    if (val.trim().length >= 8) {
+      setData({
+        ...data,
+        password: val,
+        isValidPassword: true,
+      });
+    } else {
+      setData({
+        ...data,
+        password: val,
+        isValidPassword: false,
+      });
+    }
   };
 
   const updateSecureTextEntry = () => {
@@ -59,8 +72,8 @@ const SignIn = ({navigation}) => {
     });
   };
 
-  const handleLogin = (userName, password) => {
-    context.authContext.signIn(userName, password);
+  const handleLogin = (username, password) => {
+    context.authContext.signIn(username, password);
   };
 
   return (
@@ -77,14 +90,21 @@ const SignIn = ({navigation}) => {
             placeholder="Username"
             style={styles.textInput}
             autoCapitalize="none"
-            onChangeText={val => textInputChange(val)}
+            onChangeText={val => handleUsernameChange(val)}
           />
-          {data.check_textInputChange ? (
+          {data.usernamePassedIcon ? (
             <Animatable.View animation="bounceIn">
               <Feather name="check-circle" color="green" size={20} />
             </Animatable.View>
           ) : null}
         </View>
+        {!data.isValidUsername ? (
+          <Animatable.View animation="fadeInLeft" duration={500}>
+            <Text style={styles.errorMsg}>
+              Username must be at least 5 characters long
+            </Text>
+          </Animatable.View>
+        ) : null}
         <Text style={[styles.text_footer, {marginTop: 15}]}>Password</Text>
         <View style={styles.action}>
           <FontAwesome name="lock" color="#05375a" size={20} />
@@ -103,10 +123,17 @@ const SignIn = ({navigation}) => {
             )}
           </TouchableOpacity>
         </View>
+        {!data.isValidPassword ? (
+          <Animatable.View animation="fadeInLeft" duration={500}>
+            <Text style={styles.errorMsg}>
+              Password must be at least 8 characters long
+            </Text>
+          </Animatable.View>
+        ) : null}
         <View style={styles.button}>
           <TouchableOpacity
             style={styles.signIn}
-            onPress={() => handleLogin(data.userName, data.password)}>
+            onPress={() => handleLogin(data.username, data.password)}>
             <LinearGradient
               colors={['#08d4c4', '#01ab9d']}
               style={styles.signIn}>

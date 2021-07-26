@@ -19,52 +19,87 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 const SignUp = ({navigation}) => {
   const [data, setData] = useState({
-    email: '',
+    username: '',
     password: '',
-    confirm_password: '',
-    check_textInputChange: false,
-    secureTextEntry: true,
-    confirm_secureTextEntry: true,
+    confirmPassword: '',
+    usernamePassedIcon: false,
+    passwordSecureTextEntry: true,
+    confirmPasswordSecureTextEntry: true,
+    isValidUsername: true,
+    isValidPassword: true,
+    isValidConfirmPassword: true,
   });
 
-  const textInputChange = val => {
-    if (val.length !== 0) {
+  const handleUsernameChange = val => {
+    if (val.trim().length >= 5) {
       setData({
         ...data,
-        email: val,
-        check_textInputChange: true,
+        username: val,
+        usernamePassedIcon: true,
+        isValidUsername: true,
       });
     } else {
       setData({
         ...data,
-        email: val,
-        check_textInputChange: false,
+        username: val,
+        usernamePassedIcon: false,
+        isValidUsername: false,
       });
     }
   };
 
   const handlePasswordChange = val => {
-    setData({
-      ...data,
-      password: val,
-    });
+    if (val.trim().length >= 8 && val.trim() === data.confirmPassword) {
+      setData({
+        ...data,
+        password: val.trim(),
+        isValidPassword: true,
+        isValidConfirmPassword: true,
+      });
+    } else if (val.trim().length >= 8) {
+      setData({
+        ...data,
+        password: val.trim(),
+        isValidPassword: true,
+        isValidConfirmPassword: false,
+      });
+    } else {
+      setData({
+        ...data,
+        password: val.trim(),
+        isValidPassword: false,
+        isValidConfirmPassword: false,
+      });
+    }
   };
 
   const handleConfirmPasswordChange = val => {
-    setData({...data, confirm_password: val});
+    if (val.trim().length >= 8 && val.trim() === data.password) {
+      setData({
+        ...data,
+        confirmPassword: val.trim(),
+        isValidConfirmPassword: true,
+      });
+    } else {
+      setData({
+        ...data,
+        confirmPassword: val.trim(),
+        isValidConfirmPassword: false,
+      });
+    }
   };
 
   const updateSecureTextEntry = () => {
     setData({
       ...data,
-      secureTextEntry: !data.secureTextEntry,
+      passwordSecureTextEntry: !data.passwordSecureTextEntry,
     });
   };
 
   const updateConfirmSecureTextEntry = () => {
     setData({
       ...data,
-      confirm_secureTextEntry: !data.confirm_secureTextEntry,
+      confirmPasswordSecureTextEntry: !data.confirmPasswordSecureTextEntry,
     });
   };
 
@@ -75,39 +110,53 @@ const SignUp = ({navigation}) => {
         <Text style={styles.text_header}>Sign Up Now</Text>
       </View>
       <Animatable.View animation="fadeInUpBig" style={styles.footer}>
-        <Text style={styles.text_footer}>Email</Text>
+        <Text style={styles.text_footer}>Username</Text>
         <View style={styles.action}>
           <FontAwesome name="user-o" color="#05375a" size={20} />
           <TextInput
-            placeholder="Email"
+            placeholder="Username"
             style={styles.textInput}
             autoCapitalize="none"
-            onChangeText={val => textInputChange(val)}
+            onChangeText={val => handleUsernameChange(val)}
           />
-          {data.check_textInputChange ? (
+          {data.usernamePassedIcon ? (
             <Animatable.View animation="bounceIn">
               <Feather name="check-circle" color="green" size={20} />
             </Animatable.View>
           ) : null}
         </View>
+        {!data.isValidUsername ? (
+          <Animatable.View animation="fadeInLeft" duration={500}>
+            <Text style={styles.errorMsg}>
+              Username must be at least 5 characters long
+            </Text>
+          </Animatable.View>
+        ) : null}
         <Text style={[styles.text_footer, {marginTop: 15}]}>Password</Text>
         <View style={styles.action}>
           <FontAwesome name="lock" color="#05375a" size={20} />
           <TextInput
             placeholder="Password"
-            secureTextEntry={data.secureTextEntry ? true : false}
+            secureTextEntry={data.passwordSecureTextEntry ? true : false}
             style={styles.textInput}
             autoCapitalize="none"
             onChangeText={val => handlePasswordChange(val)}
           />
           <TouchableOpacity onPress={updateSecureTextEntry}>
-            {data.secureTextEntry ? (
+            {data.passwordSecureTextEntry ? (
               <Feather name="eye-off" color="grey" size={20} />
             ) : (
               <Feather name="eye" color="grey" size={20} />
             )}
           </TouchableOpacity>
         </View>
+        {!data.isValidPassword ? (
+          <Animatable.View animation="fadeInLeft" duration={500}>
+            <Text style={styles.errorMsg}>
+              Password must be at least 8 characters long
+            </Text>
+          </Animatable.View>
+        ) : null}
         <Text style={[styles.text_footer, {marginTop: 15}]}>
           Confirm Password
         </Text>
@@ -115,19 +164,26 @@ const SignUp = ({navigation}) => {
           <FontAwesome name="lock" color="#05375a" size={20} />
           <TextInput
             placeholder="Same Password As Above"
-            secureTextEntry={data.confirm_secureTextEntry ? true : false}
+            secureTextEntry={data.confirmPasswordSecureTextEntry ? true : false}
             style={styles.textInput}
             autoCapitalize="none"
             onChangeText={val => handleConfirmPasswordChange(val)}
           />
           <TouchableOpacity onPress={updateConfirmSecureTextEntry}>
-            {data.confirm_secureTextEntry ? (
+            {data.confirmPasswordSecureTextEntry ? (
               <Feather name="eye-off" color="grey" size={20} />
             ) : (
               <Feather name="eye" color="grey" size={20} />
             )}
           </TouchableOpacity>
         </View>
+        {!data.isValidConfirmPassword ? (
+          <Animatable.View animation="fadeInLeft" duration={500}>
+            <Text style={styles.errorMsg}>
+              Password must be the same as above
+            </Text>
+          </Animatable.View>
+        ) : null}
         <View style={styles.button}>
           <LinearGradient colors={['#08d4c4', '#01ab9d']} style={styles.signUp}>
             <Text style={[styles.textSign, {color: 'white'}]}>Sign Up</Text>
@@ -160,7 +216,7 @@ const styles = StyleSheet.create({
     paddingBottom: 50,
   },
   footer: {
-    flex: 3,
+    flex: 4,
     backgroundColor: '#fff',
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
